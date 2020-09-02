@@ -9,8 +9,9 @@ jobs:
     steps:
     - name: Create PR using Version Bump 
       run: |
+        appVersion=${{github.event.release.tag_name}}
         curl -H "Accept: application/vnd.github.everest-preview+json" \
         -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
         --request POST \
-        --data '{"event_type": "bump-chart-version", "client_payload": { "chart_name": "${{github.repository}}", "chart_version": "1.2.1", "app_version": "${{github.event.release.tag_name}:1}"}}' \
+        --data '{"event_type": "bump-chart-version", "client_payload": { "chart_name": "${{github.repository}}", "chart_version": "1.2.1", "app_version": "${appVersion:1}"}}' \
         https://api.github.com/repos/newrelic-experimental/helm-charts/dispatches
