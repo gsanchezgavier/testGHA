@@ -1,0 +1,16 @@
+name: Update Helm Chart POMI version
+on:
+  release:
+    types: [published]
+
+jobs:
+  create_helm_chart_pr:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Create PR using Version Bump 
+      run: |
+        curl -H "Accept: application/vnd.github.everest-preview+json" \
+        -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+        --request POST \
+        --data '{"event_type": "bump-chart-version", "client_payload": { "chart_name": "${{github.repository}}", "chart_version": "1.2.1", "app_version": "${{github.event.release.tag_name}:1}"}}' \
+        https://api.github.com/repos/newrelic-experimental/helm-charts/dispatches
