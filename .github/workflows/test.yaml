@@ -1,0 +1,13 @@
+name: test
+
+on: 
+  repository_dispatch:
+    types: test
+
+jobs:
+  hello_world_job:
+    runs-on: ubuntu-latest
+    name: A job thats bumps the versions of a chart
+    steps:
+    - name: Create PR using Version Bump 
+      run: echo test
