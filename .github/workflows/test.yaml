@@ -2,7 +2,7 @@ name: test
 
 on: 
   repository_dispatch:
-    types: test
+    types: test-dash
 
 jobs:
   hello_world_job:
