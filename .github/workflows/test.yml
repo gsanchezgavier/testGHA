@@ -2,6 +2,7 @@ name: Push/PR pipeline
 
 on:
   pull_request:
+  push:
 
 # env:
 jobs:
