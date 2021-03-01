@@ -10,7 +10,7 @@ jobs:
     name: Validate code via linters
     runs-on: ubuntu-20.04
     env:
-      SECRET: secrets.TEST_SECRET
+      SECRET: secrets.TEST_SECRET_INVALID
     steps:
       - uses: actions/checkout@v2
       - name: Login to DockerHub
