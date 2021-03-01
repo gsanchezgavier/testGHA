@@ -13,7 +13,7 @@ jobs:
       SECRET: secrets.TEST_SECRET_INVALID
     steps:
       - name: print
-        run: echo env.SECRET
+        run: echo $SECRET
       - name: Login to DockerHub
         if: ${{env.SECRET != null}}
         uses: docker/login-action@v1
