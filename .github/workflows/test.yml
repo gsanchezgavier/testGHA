@@ -10,7 +10,7 @@ jobs:
     name: Validate code via linters
     runs-on: ubuntu-20.04
     env:
-      SECRET: ${{ secrets.TEST_SECRET_INVALID }}
+      SECRET: ${{ secrets.TEST_SECRET }}
     steps:
       - name: print
         run: echo $SECRET
