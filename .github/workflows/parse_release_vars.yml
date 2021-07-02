@@ -1,0 +1,26 @@
+name: Release
+
+on:
+  release:
+    types: [released]
+
+jobs:
+  publish-to-s3:
+    name: Send release assets to S3
+    runs-on: ubuntu-20.04
+    steps:
+      - id: release_details
+        run: |
+          tag=$(echo ${{ github.event.release.tag_name }})
+          regex="(.*)-([0-9]+\.[0-9]+\.[0-9]+)"
+
+          if [[ $tag =~ $regex ]]; then
+              name=${BASH_REMATCH[1]}
+              echo "$name"
+              echo "::set-output name=version::${name}"
+              version=${BASH_REMATCH[2]}
+              echo "$version"
+              echo "::set-output name=version::${version}"
+          else
+              exit 1
+          fi
