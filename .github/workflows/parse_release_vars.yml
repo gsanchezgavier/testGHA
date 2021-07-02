@@ -3,6 +3,8 @@ name: Release
 on:
   release:
     types: [released]
+env:
+  TAG: ${{ github.event.release.tag_name }}
 
 jobs:
   publish-to-s3:
@@ -11,16 +13,19 @@ jobs:
     steps:
       - id: release_details
         run: |
-          tag=$(echo ${{ github.event.release.tag_name }})
           regex="(.*)-([0-9]+\.[0-9]+\.[0-9]+)"
 
-          if [[ $tag =~ $regex ]]; then
+          if [[ $TAG =~ $regex ]]; then
               name=${BASH_REMATCH[1]}
               echo "$name"
-              echo "::set-output name=version::${name}"
+              echo "::set-output name=INTEGRATION_NAME::${name}"
               version=${BASH_REMATCH[2]}
               echo "$version"
-              echo "::set-output name=version::${version}"
+              echo "::set-output name=INTEGRATION_VERSION::${version}"
           else
               exit 1
           fi
+      - id: test_out
+        run: |
+          echo ${{ steps.release_details.outputs.INTEGRATION_VERSION }}
+          echo ${{ steps.release_details.outputs.INTEGRATION_NAME }}
