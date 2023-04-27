@@ -1,0 +1,23 @@
+name: test is held
+
+on:
+  push:
+
+env:
+  LOCK_ENDPOINT: "https://gsanchezgavier.github.io/testGHA/automatic_release_enable"
+
+jobs:
+  test:
+    name: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Check lock endpoint
+        run: |
+          http_status=$(curl -s -o /dev/null -w "%{http_code}" "${{ env.LOCK_ENDPOINT }}")
+
+          if [ "$http_status" -eq 200 ]; then
+            exit 0
+          else
+            exit 1
+          fi
