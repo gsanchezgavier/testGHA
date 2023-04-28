@@ -1,23 +1,24 @@
 name: test is held
 
 on:
-  push:
-
-env:
-  LOCK_ENDPOINT: "https://gsanchezgavier.github.io/testGHA/automatic_release_enable"
+  workflow_dispatch:
+    inputs:
+      endpoint:
+        description: 'endpoint'
+        required: true
+        default: 'test'
+        type: string
 
 jobs:
   test:
     name: test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Check lock endpoint
-        run: |
-          http_status=$(curl -s -o /dev/null -w "%{http_code}" "${{ env.LOCK_ENDPOINT }}")
+      - name: test
+        run: exit 0
 
-          if [ "$http_status" -eq 200 ]; then
-            exit 0
-          else
-            exit 1
-          fi
+  test-reusable:
+    name: test reusable
+    uses: ./.github/workflows/reusable.yaml
+    with:
+      lock_endpoint: ${{ inputs.endpoint }}
