@@ -16,7 +16,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        ref: ${{ inputs.branch }}
+        with:
+          ref: ${{ inputs.branch }}
       - name: remove unblock file
         run: rm ${{ env.UNBLOCK_FILE_NAME }}
       - name: Configure Git

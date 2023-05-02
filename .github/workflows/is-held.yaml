@@ -11,6 +11,6 @@ on:
 
 jobs:
   check-block-endpoint:
-    uses: ./.github/workflows/automatic-release-block/status.yaml
+    uses: ./.github/workflows/status.yaml
     with:
       block_endpoint: ${{ inputs.block_endpoint }}
