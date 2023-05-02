@@ -6,9 +6,9 @@ name: Trigger pre-release shared workflow
 #    "job-name":
 #      uses: newrelic/newrelic-coreint-automation/.github/workflows/trigger_prerelease.yaml@v1
 #      with:
-#        bot_token: {{ secret."github_token_name" }}
-#        slack_channel: {{ secret."slack_channel_name" }}
-#        slack_token: {{ secret."slack_token_name" }}
+#        bot_token: bot_token
+#        slack_channel: slack_channel
+#        slack_token: slack_token
 
 on:
   workflow_call:
