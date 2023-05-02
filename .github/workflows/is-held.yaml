@@ -3,22 +3,14 @@ name: test is held
 on:
   workflow_dispatch:
     inputs:
-      endpoint:
+      block_endpoint:
         description: 'endpoint'
         required: true
         default: 'test'
         type: string
 
 jobs:
-  test:
-    name: test
-    runs-on: ubuntu-latest
-    steps:
-      - name: test
-        run: exit 0
-
-  test-reusable:
-    name: test reusable
-    uses: ./.github/workflows/reusable.yaml
+  check-block-endpoint:
+    uses: ./.github/workflows/automatic-release-block/status.yaml
     with:
-      lock_endpoint: ${{ inputs.endpoint }}
+      block_endpoint: ${{ inputs.block_endpoint }}
