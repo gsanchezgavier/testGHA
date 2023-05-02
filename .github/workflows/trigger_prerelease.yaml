@@ -39,7 +39,7 @@ jobs:
           http_status=$(curl -s -o /dev/null -w "%{http_code}" "${{ inputs.block_endpoint }}")
 
           if [ "$http_status" != 200 ]; then
-            echo Fail checking release block endpoint (${{ inputs.block_endpoint }})
+            echo "Fail checking release block endpoint: ${{ inputs.block_endpoint }}"
             exit 1
           fi
       - name: Check is triggered for default branch
