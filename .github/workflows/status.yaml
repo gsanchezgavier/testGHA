@@ -7,10 +7,16 @@ on:
         type: string
         default: https://newrelic.github.io/newrelic-coreint-automation/automatic_release_enable
 
-
 jobs:
-  unblock:
-    name: Check Release status
+  status:
+    name: Check release block
     runs-on: ubuntu-latest
     steps:
+      - name: Check block endpoint
+        run: |
+          http_status=$(curl -s -o /dev/null -w "%{http_code}" "${{ inputs.block_endpoint }}")
 
+          if [ "$http_status" != 200 ]; then
+            echo "Fail checking release block endpoint: ${{ inputs.block_endpoint }}"
+            exit 1
+          fi
