@@ -1,4 +1,4 @@
-name: Creates the unblock file allowing automatic releases
+name: Unblock automatic releases
 
 on:
   workflow_dispatch:

@@ -1,4 +1,4 @@
-name: Removes the unblock file locking all automatic releases
+name: Block automatic releases
 
 on:
   workflow_dispatch:
