@@ -1,14 +1,11 @@
+name: Creates the unblock file allowing automatic releases
+
 on:
   workflow_dispatch:
-    inputs:
-      branch:
-        description: 'Branch name where the unblock file is located'
-        required: false
-        default: 'gh-pages'
-        type: string
 
 env:
   UNBLOCK_FILE_NAME: automatic_release_enable
+  BRANCH: gh-pages
 
 jobs:
   unblock:
@@ -17,7 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          ref: ${{ inputs.branch }}
+          ref: ${{ env.BRANCH }}
       - name: Create unblock file
         run: echo "Removing/renaming this file will block automatic releases." > ${{ env.UNBLOCK_FILE_NAME }}
       - name: Configure Git
