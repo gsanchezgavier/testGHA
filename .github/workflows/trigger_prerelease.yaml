@@ -6,9 +6,9 @@ name: Trigger pre-release shared workflow
 #    "job-name":
 #      uses: newrelic/newrelic-coreint-automation/.github/workflows/trigger_prerelease.yaml@v1
 #      with:
-#        bot_token: bot_token
-#        slack_channel: slack_channel
-#        slack_token: slack_token
+#        bot_token: {{ secret."github_token_name" }}
+#        slack_channel: {{ secret."slack_channel_name" }}
+#        slack_token: {{ secret."slack_token_name" }}
 
 on:
   workflow_call:
@@ -30,16 +30,18 @@ on:
         required: true
 
 jobs:
-  check-block-endpoint:
-    uses: ./.github/workflows/automatic-release-block/status.yaml
-    with:
-      block_endpoint: ${{ inputs.block_endpoint }}
-
   prerelease:
-    needs: check-block-endpoint
     name: Create prerelease
     runs-on: ubuntu-latest
     steps:
+      - name: Check block endpoint
+        run: |
+          http_status=$(curl -s -o /dev/null -w "%{http_code}" "${{ inputs.block_endpoint }}")
+
+          if [ "$http_status" != 200 ]; then
+            echo "Fail checking release block endpoint: ${{ inputs.block_endpoint }}"
+            exit 1
+          fi
       - name: Check is triggered for default branch
         run: |
           if [ ${GITHUB_REF_NAME} != ${{ github.event.repository.default_branch }} ] || [ ${GITHUB_REF_TYPE} != "branch" ];then
@@ -51,12 +53,16 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.event.repository.default_branch }}
           token: "${{ secrets.bot_token }}"
+      - name: Get common dictionary file
+        uses: newrelic/newrelic-infra-checkers@v1
       - uses: newrelic/release-toolkit/contrib/ohi-release-notes@v1
         id: release-data
+        with:
+          dictionary: .rt-dictionary.yml
       - name: Configure Git
         if: ${{ steps.release-data.outputs.skip-release != 'true' }}
         run: |
-          git config user.name newrelic-coreint-team
+          git config user.name newrelic-coreint-bot
           git config user.email coreint-dev@newrelic.com
       - name: Commit updated changelog
         if: ${{ steps.release-data.outputs.skip-release != 'true' }}
@@ -77,4 +83,3 @@ jobs:
           slack-bot-user-oauth-access-token: ${{ secrets.slack_token }}
           slack-channel: ${{ secrets.slack_channel }}
           slack-text: "❌ `${{ env.REPO_FULL_NAME }}`: prerelease pipeline failed."
-          # slack-text: "❌ `${{ env.GITHUB_ACTION_REPOSITORY }}`: prerelease pipeline failed."
