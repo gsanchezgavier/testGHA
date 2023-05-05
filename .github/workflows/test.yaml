@@ -1,0 +1,21 @@
+name: Block automatic releases
+
+on:
+  push:
+
+jobs:
+  check:
+    name: check
+    runs-on: ubuntu-latest
+    steps:
+      - name: remove unblock file
+        run: exit 1
+
+  main:
+    needs: check
+    name: main
+    runs-on: ubuntu-latest
+    steps:
+      - name: remove unblock file
+        if: ${{ failure() }}
+        run: echo fail
